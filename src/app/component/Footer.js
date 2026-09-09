@@ -1,111 +1,199 @@
-import {
-  Box,
-  Container,
-  Divider,
-  Grid,
-  IconButton,
-  Link,
-  Tooltip,
-  Typography
-} from '@mui/material';
+import { Box, Container, Divider, Grid, IconButton, Link, Tooltip, Typography } from '@mui/material';
 import EmailIcon from '@mui/icons-material/Email';
 
 import { scrollToTopNow } from './ScrollToTop';
 import { social } from 'links';
+import { tokens, fx, mono, display } from 'theme';
 
-const FooterLink = (props) => (
-  <Typography display='block' variant='caption' color='textPrimary'>
-    <Link color='inherit' underline='hover' {...props} />
-  </Typography>
-);
+const columns = [
+  {
+    heading: 'About',
+    links: [
+      { label: 'Mochimo', to: '/' },
+      { label: 'Adequate', to: '/adq' },
+      { label: 'Meet The Team', to: '/meet-the-team' },
+      { label: 'Privacy', to: '/privacy-policy' }
+    ]
+  },
+  {
+    heading: 'Network',
+    links: [
+      { label: 'Explorer', href: 'https://mochiscan.org' },
+      { label: 'Live Status', href: 'https://status.mochimo.org' },
+      { label: 'Mining', to: '/mining' },
+      { label: 'Vote: PoW or PoS', to: '/vote' }
+    ]
+  },
+  {
+    heading: 'Links',
+    links: [
+      { label: 'Github', href: 'https://github.com/mochimodev/mochimo/releases' },
+      { label: 'Whitepaper', href: '/assets/files/mochimo_wp_EN.pdf' },
+      { label: 'Exchanges', to: '/exchanges-mcm' },
+      { label: 'Merchandise', href: 'https://my-store-b9cfd9.creator-spring.com' },
+      { label: 'CoinMarketCap', href: 'https://coinmarketcap.com/currencies/mochimo/' }
+    ]
+  }
+];
 
-const LinkButton = ({ children, title, ...props }) => (
-  <Tooltip title={title} placement='top' arrow>
-    <Link {...props}><IconButton>{children}</IconButton></Link>
-  </Tooltip>
-);
+function FooterLink ({ label, to, href }) {
+  const props = href
+    ? { href, target: '_blank', rel: 'noopener noreferrer' }
+    : { to, onClick: scrollToTopNow };
+  return (
+    <Link
+      underline='none' {...props}
+      sx={{
+        display: 'block',
+        fontSize: '0.875rem',
+        color: tokens.textDim,
+        py: 0.6,
+        transition: 'color 160ms ease, transform 160ms ease',
+        '&:hover': { color: tokens.text, transform: 'translateX(3px)' }
+      }}
+    >{label}
+    </Link>
+  );
+}
 
 export default function Footer () {
   return (
-    <footer
-      style={{
-        zIndex: 2,
-        background: 'rgba(46, 46, 46, 0.75)',
+    <Box
+      component='footer'
+      sx={{
         position: 'relative',
-        bottom: 0,
-        borderTop: '0.25em solid #0059ff',
+        zIndex: 2,
+        mt: 10,
+        borderTop: fx.hairline,
+        background: 'linear-gradient(180deg, rgba(10,14,21,0.4) 0%, rgba(5,7,11,0.92) 100%)',
+        backdropFilter: 'blur(14px)',
+        '&:before': {
+          content: '""',
+          position: 'absolute',
+          top: -1,
+          left: '18%',
+          right: '18%',
+          height: '1px',
+          background: `linear-gradient(90deg, transparent, ${tokens.brand}, transparent)`
+        }
       }}
     >
-      <Container align='center' sx={{
-        marginTop: '10px',
-        marginBottom: '10px'
-      }}>
-        <Grid container spacing={1} align='center'>
-          <Grid container item sm={12} md={6}>
-            <Grid
-              item xs={12} display='flex' justifyContent='center'
-              flexDirection='row' alignItems='center'
+      <Container maxWidth='lg' sx={{ pt: { xs: 6, md: 8 }, pb: 4 }}>
+        <Grid container spacing={{ xs: 5, md: 4 }}>
+          <Grid item xs={12} md={4.5}>
+            <Box
+              component='img' alt='Mochimo logo and slogan'
+              src='/assets/images/logo-full.png'
+              sx={{ width: 250, maxWidth: '70%', display: 'block', mb: 2.5 }}
+            />
+            <Typography
+              sx={{ color: tokens.textDim, fontSize: '0.9rem', maxWidth: 380, mb: 3 }}
             >
-              <Box><img alt='adg logo' src='/assets/source/adq-logo.svg' style={{ width: 150, maxWidth: '25vw' }} /></Box>
-              <Typography display='inline-block' variant='caption'>&emsp;+&emsp;</Typography>
-              <Box>
-                <img alt='mochimo logo and slogan' src='/assets/images/logo-full.png' style={{ width: 256, maxWidth: '50vw' }} />
-              </Box>
-            </Grid>
-            <Grid item xs={12}>
-              {social.map(({ href, Icon, primary }, i) => (
-                <LinkButton
-                  key={`footer-social-${i}`} href={href} title={primary}
-                ><Icon />
-                </LinkButton>
+              The world's first completely quantum resistant cryptocurrency.
+              Open source, fully decentralized, and mined by GPUs since 2018.
+            </Typography>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5, mb: 3, ml: -1 }}>
+              {social.map(({ href, Icon, primary }) => (
+                <Tooltip key={primary} title={primary}>
+                  <IconButton
+                    component='a' href={href} target='_blank' rel='noopener noreferrer'
+                    size='small' sx={{ color: tokens.textDim }}
+                  ><Icon fontSize='small' />
+                  </IconButton>
+                </Tooltip>
               ))}
-              <LinkButton href='mailto:support@mochimo.org' title='Email'>
-                <EmailIcon />
-              </LinkButton>
-            </Grid>
+              <Tooltip title='Email'>
+                <IconButton
+                  component='a' href='mailto:support@mochimo.org'
+                  size='small' sx={{ color: tokens.textDim }}
+                ><EmailIcon fontSize='small' />
+                </IconButton>
+              </Tooltip>
+            </Box>
+            <Link
+              to='/adq' onClick={scrollToTopNow}
+              sx={{ display: 'inline-flex', alignItems: 'center', gap: 1.25, opacity: 0.65, '&:hover': { opacity: 1 } }}
+            >
+              <Typography
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.16em',
+                  textTransform: 'uppercase',
+                  color: tokens.textFaint
+                }}
+              >Built by
+              </Typography>
+              <Box
+                component='img' alt='Adequate Systems'
+                src='/assets/source/adq-logo.svg'
+                sx={{ width: 110 }}
+              />
+            </Link>
           </Grid>
-          <Grid container item sm={12} md={6}>
-            <Grid item xs={6} padding={2} align='right'>
-              <Typography variant='h5' gutterBottom>About</Typography>
-              <FooterLink to='/adq' onClick={scrollToTopNow}>Adequate</FooterLink>
-              <FooterLink to='/' onClick={scrollToTopNow}>Mochimo</FooterLink>
-              <FooterLink to='/privacy-policy'>Privacy</FooterLink>
+
+          {columns.map(({ heading, links }) => (
+            <Grid item xs={6} sm={4} md={2.5} key={heading}>
+              <Typography
+                sx={{
+                  fontFamily: mono,
+                  fontSize: '0.66rem',
+                  letterSpacing: '0.18em',
+                  textTransform: 'uppercase',
+                  color: tokens.brand,
+                  mb: 1.75
+                }}
+              >{heading}
+              </Typography>
+              {links.map((link) => (
+                <FooterLink key={link.label} {...link} />
+              ))}
             </Grid>
-            <Grid item xs={6} padding={2} align='left'>
-              <Typography variant='h5' gutterBottom>Links</Typography>
-              <FooterLink href='https://github.com/mochimodev/mochimo/releases'>
-                Github
-              </FooterLink>
-              <FooterLink to='/mining' onClick={scrollToTopNow}>Mining</FooterLink>
-              <FooterLink href='/assets/files/mochimo_wp_EN.pdf'>
-                Whitepaper
-              </FooterLink>
-              <FooterLink href='https://my-store-b9cfd9.creator-spring.com'>
-                Merchandise
-              </FooterLink>
-              <FooterLink href='https://coinmarketcap.com/currencies/mochimo/'>
-                CoinMarketCap
-              </FooterLink>
-            </Grid>
-          </Grid>
+          ))}
         </Grid>
-        <Typography display='block' variant='caption' align='center'>
-          Some icons by&nbsp;
-          <Link href='https://www.flaticon.com/authors/icongeek26'>icongeek26</Link>,&nbsp;
-          <Link href='https://www.flaticon.com/authors/phatplus'>phatplus</Link>,&nbsp;
-          <Link href='https://www.flaticon.com/authors/freepik'>Freepik</Link> -&nbsp;
-          <Link href='https://www.flaticon.com/'>Flaticon</Link>
-        </Typography>
-        <Grid item xs={12}><Divider /></Grid>
-        <Grid item xs={12}>
-          <Typography variant='caption' fontSize={{ xs: 'auto' }}>
-            Copyright 2025 &copy; All rights Reserved.
-            <Box component='span' display={{ xs: 'none', sm: 'inline' }}>&nbsp;</Box>
-            <Box component='span' display={{ xs: 'inline', sm: 'none' }}><br /></Box>
-            The Mochimo Foundation.
+
+        <Divider sx={{ mt: { xs: 5, md: 7 }, mb: 3 }} />
+
+        <Box
+          sx={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 1.5,
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          <Typography sx={{ fontSize: '0.78rem', color: tokens.textFaint }}>
+            Copyright 2025 &copy; All rights Reserved. The Mochimo Foundation.
           </Typography>
-        </Grid>
+          <Typography sx={{ fontSize: '0.72rem', color: tokens.textFaint }}>
+            Some icons by&nbsp;
+            <Link href='https://www.flaticon.com/authors/icongeek26' color='inherit' underline='hover'>icongeek26</Link>,&nbsp;
+            <Link href='https://www.flaticon.com/authors/phatplus' color='inherit' underline='hover'>phatplus</Link>,&nbsp;
+            <Link href='https://www.flaticon.com/authors/freepik' color='inherit' underline='hover'>Freepik</Link> -&nbsp;
+            <Link href='https://www.flaticon.com/' color='inherit' underline='hover'>Flaticon</Link>
+          </Typography>
+        </Box>
       </Container>
-    </footer>
+      <Box
+        aria-hidden
+        sx={{
+          fontFamily: display,
+          fontWeight: 700,
+          textAlign: 'center',
+          fontSize: 'clamp(3rem, 15vw, 13rem)',
+          lineHeight: 0.8,
+          letterSpacing: '-0.05em',
+          background: `linear-gradient(180deg, ${tokens.line} 0%, transparent 82%)`,
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+          userSelect: 'none',
+          pb: 1,
+          px: 2
+        }}
+      >MOCHIMO
+      </Box>
+    </Box>
   );
 }

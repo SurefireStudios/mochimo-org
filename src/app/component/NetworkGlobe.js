@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { applyObjDiff, dupObj } from 'util';
+import { applyObjDiff, dupObj } from '../../util';
 import { useGetNetworkQuery } from 'api';
 
 import { Box, LinearProgress } from '@mui/material';
