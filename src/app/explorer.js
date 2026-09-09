@@ -22,7 +22,7 @@ import {
   RichlistEntries,
   TransactionHistory
 } from 'app/component/Results';
-import { capitalize } from 'util';
+import { capitalize } from '../util';
 import { scrollToTopNow } from './component/ScrollToTop';
 
 function ResultsLabel (props) {

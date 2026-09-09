@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, Tooltip, Typography } from '@mui/material';
-import { capitalize, isTagged } from 'util';
+import { capitalize, isTagged } from '../../util';
 
 const swaplist = [
   { id: /\bw/gi, with: 'ω' },
