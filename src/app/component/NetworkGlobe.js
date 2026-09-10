@@ -160,7 +160,7 @@ export default function NetworkGlobe ({ mfx }) {
       window.addEventListener('resize', resize);
       return () => window.removeEventListener('resize', resize);
     }
-  }, [mql.matches]);
+  }, [mql.matches, mfx]);
 
   useEffect(() => {
     if (globe.current) {
