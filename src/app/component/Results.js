@@ -25,7 +25,7 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import TimePrep from 'app/component/TimePrep';
 import Pagination from 'app/component/Pagination';
 import { Address, Amount, Properties } from 'app/component/Types';
-import { capitalize } from 'util';
+import { capitalize } from '../../util';
 import Trigg from 'mochimo/src/trigg';
 
 export function GridSpacer (props) {

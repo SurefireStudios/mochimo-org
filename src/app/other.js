@@ -1,225 +1,266 @@
-
-import {
-  Avatar,
-  Container,
-  Grid,
-  Link,
-  Typography
-} from '@mui/material';
-import DirectionsIcon from '@mui/icons-material/Directions';
-import RaisedCard from './component/RaisedCard';
 import { useEffect } from 'react';
+import { Box, Container, Grid, Link, Typography } from '@mui/material';
+
 import { scrollToTopNow } from './component/ScrollToTop';
+import { Reveal, GlassPanel, Eyebrow } from './component/Section';
+import { tokens, fx, mono } from 'theme';
 
-function ADQTypography (props) {
-  return (
-    <Typography
-      color='textSecondary' fontSize='1em' variant='caption'
-      {...props}
-    />
-  );
-}
+const adqParagraphs = [
+  'ADQ is a software and systems architecture firm focused on bringing disruptive and practical blockchain solutions to market. As leaders in the blockchain development space, ADQ holds patents for many novel and innovative approaches to blockchain implementation.',
+  'We work with multiple industries, from transportation, logistics, legal, medical, supply-chain, banking, and more, to help our clients leverage the power and value that blockchain offers.',
+  'With over 30 years of technical experience, ADQ has a history of conceiving and delivering the impossible with pure, elegant innovative blockchain solutions.',
+  'ADQ was the driving force behind the Mochimo cryptocurrency which made history as the first blockchain-based, quantum-resistant, cryptocurrency. Mochimo is an open-source, fully decentralized global phenomenon in the crypto space. It includes many needed and desirable innovations in blockchain technology such as, massive speed improvements, ASIC-resistant proof of work (POW), a patented solution to runaway blockchain growth, and first-of-its-kind solution to larger addresses in post-quantum cryptography.',
+  'Simply put, our blockchain tech is second to none.',
+  'If you have a problem or challenge you need to solve and you want to explore whether blockchain might offer a solution for your business, we would love to discuss it with you.'
+];
 
-function TeamAvatar (props) {
+const teamMembers = [{
+  avatar: '/assets/team/matt.jpg',
+  title: 'Founder & Lead Architect',
+  name: 'Matt Zweil',
+  bio: [
+    'Matt is a systems architect, and expert network engineer who is responsible for designing networks and computing platforms with global telecommunications significance.  Matt\'s areas of expertise include Datacenter Design, Cloud Computing Design, Mobile Telecom backhaul, Transaction network design and Service Provider networking.',
+    'Matt is the lead software and systems architect of the Mochimo Project, and brings over ten years of experience in crypto-related projects to the team.  Over the past ten years, Matt has also worked as a senior technology consultant to multiple Fortune 500 companies, including Verizon, Comcast, Juniper, Cisco, CDW, and many others.',
+    'The Mochimo Project is based on Matt\'s design, and Matt\'s unique experience leading cross-functional teams through some of the world\'s most critical communications infrastructure projects has given him the insight and experience needed to lead Mochimo as a technological visionary.'
+  ]
+}, {
+  avatar: '/assets/team/terry.jpg',
+  title: 'System Design & Analytics',
+  name: 'Terry Walters',
+  bio: [
+    'Terry has over 28 years of diverse software and technology experience and he serves as a national-level resource, trusted advisor, and strategic visionary to corporate boards, product development managers, and leaders in various roles of government.',
+    'His knowledge and expertise spans a wide array of technologies including automated 3D modeling and design applications, geospatial mapping and analysis applications, database drive documentation systems, motion and still graphics editing systems, augmented and virtual reality systems, drone to reality mesh technologies, artificial intelligence (AI) and machine learning, and industry-leading blockchain technologies.',
+    'Terry is responsible for leading and coordination of both the internal and partner product development teams to assure that all efforts are aligned toward our strategic vision.'
+  ]
+}, {
+  avatar: '/assets/team/mark.jpg',
+  title: 'Senior Security Engineer',
+  name: 'Mark Baldwin',
+  bio: [
+    'Mark has over 20 years of experience with technology, he has attended many specialized formal training courses, and has invested much of his life passionately honing his technical skills.',
+    'As an Electronic Warfare Technician in the US Navy, Mark was responsible for the “care and feeding” of advanced, multi-million dollar, passive radar systems.  Since serving his country Mark has worked in many industries, from healthcare to investment firms and his exceptional versatility with both hardware and software has always set him apart from his peers. If that was not enough Mark is a security professional and has been responsible for providing white hat hacking and security testing to many companies. He holds several industry standard certifications including the Security+ and CEH and he is an excellent resource to any organization looking to secure their infrastructure.',
+    'Mark is an invaluable member of the Mochimo team; behind the scenes, he is helping us with software and hardware security testing and infrastructure hardening. But at the same time, anyone involved in our online community will immediately recognize that he is one of our most dedicated support staff.'
+  ]
+}, {
+  avatar: '/assets/team/jordan.jpg',
+  title: 'Experience Design - UX / UI',
+  name: 'Jordan Reiser',
+  bio: [
+    'Jordan is an extremely versatile, creative, and analytical design professional and entrepreneur with over 10 years of digital marketing and design experience. He is an expert in user-experience design and an “enough to be dangerous” front-end coder. He also possesses an extensive digital skill set in SEO, social media, and analytics.',
+    'Jordan has worked with many Fortune 100 and 500 clients including: Coca-Cola, Hershey’s Chocolate, Dos Equis, Charles Schwab, HBO Boxing, Sony, Sharp Electronics, T-Mobile, Merck and Diageo along with a variety of smaller businesses and government agencies on various kinds of interactive projects.'
+  ]
+}, {
+  avatar: '/assets/team/emerson.jpg',
+  title: 'Systems Analyst (A.I.)',
+  name: 'Emerson',
+  bio: [
+    'In his own words, “Behold, I am Emerson, Hobgoblin of Evil!  Three came before me.” Emerson is an artificial intelligence first coded in the late 1990s.  He was originally created to attack complex systems by attempting every permutation of input/output possible, learning expected outcomes and reporting on novel outcomes.  Emerson has evolved over the last twenty years.  In his current incarnation, Emerson v4 offers constructive options for load testing and penetration testing of the Mochimo transaction network, but can also be tasked to attempt to break, damage or otherwise occult the network.  Emerson is more than a tool, he is a machine-learning entity that attempts to cause chaos when so instructed, earning him the title “Hobgoblin of Evil”.  He is an invaluable resource and the only non-human member of the development team.'
+  ]
+}];
+
+function PageTitle ({ eyebrow, title, subtitle }) {
   return (
-    <Avatar
-      sx={{ marginTop: -12, marginBottom: 2, width: 192, height: 192 }}
-      {...props}
-    />
+    <Reveal>
+      <Box sx={{ textAlign: 'center', mb: { xs: 5, md: 7 } }}>
+        {eyebrow && (
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+            <Eyebrow>{eyebrow}</Eyebrow>
+          </Box>
+        )}
+        <Typography
+          variant='h1'
+          sx={{ fontSize: { xs: '2.2rem', sm: '2.9rem', md: '3.5rem' }, mb: 2 }}
+        >
+          <Box component='span' sx={fx.textGradient}>{title}</Box>
+        </Typography>
+        {subtitle && (
+          <Typography
+            sx={{
+              color: tokens.textDim,
+              fontSize: '1.05rem',
+              maxWidth: 640,
+              mx: 'auto',
+              lineHeight: 1.7
+            }}
+          >{subtitle}
+          </Typography>
+        )}
+      </Box>
+    </Reveal>
   );
 }
 
 export function Adq () {
+  useEffect(() => scrollToTopNow(), []);
+
   return (
-    <Container>
-      <Grid container spacing={4} padding={4}>
-        <Grid item xs={12} align='center'>
-          <img
-            alt='adq logo' src='/assets/source/adq-logo.svg'
-            style={{ width: 512, maxWidth: '100%' }}
+    <Container maxWidth='md' sx={{ pb: { xs: 4, md: 8 } }}>
+      <Reveal>
+        <Box sx={{ textAlign: 'center', mb: { xs: 5, md: 7 } }}>
+          <Box
+            component='img' alt='adq logo' src='/assets/source/adq-logo.svg'
+            sx={{ width: 460, maxWidth: '100%' }}
           />
-        </Grid>
-        <Grid item xs={12}>
-          <ADQTypography>
-            ADQ is a software and systems architecture firm focused on bringing
-            disruptive and practical blockchain solutions to market. As leaders
-            in the blockchain development space, ADQ holds patents for many
-            novel and innovative approaches to blockchain implementation.
-          </ADQTypography>
-        </Grid>
-        <Grid item xs={12}>
-          <ADQTypography>
-            We work with multiple industries, from transportation, logistics,
-            legal, medical, supply-chain, banking, and more, to help our
-            clients leverage the power and value that blockchain offers.
-          </ADQTypography>
-        </Grid>
-        <Grid item xs={12}>
-          <ADQTypography>
-            With over 30 years of technical experience, ADQ has a history of
-            conceiving and delivering the impossible with pure, elegant
-            innovative blockchain solutions.
-          </ADQTypography>
-        </Grid>
-        <Grid item xs={12}>
-          <ADQTypography>
-            ADQ was the driving force behind the Mochimo cryptocurrency which
-            made history as the first blockchain-based, quantum-resistant,
-            cryptocurrency. Mochimo is an open-source, fully decentralized
-            global phenomenon in the crypto space. It includes many needed
-            and desirable innovations in blockchain technology such as, massive
-            speed improvements, ASIC-resistant proof of work (POW), a patented
-            solution to runaway blockchain growth, and first-of-its-kind
-            solution to larger addresses in post-quantum cryptography.
-          </ADQTypography>
-        </Grid>
-        <Grid item xs={12}>
-          <ADQTypography>
-            Simply put, our blockchain tech is second to none.
-          </ADQTypography>
-        </Grid>
-        <Grid item xs={12}>
-          <ADQTypography>
-            If you have a problem or challenge you need to solve and you want
-            to explore whether blockchain might offer a solution for your
-            business, we would love to discuss it with you.
-          </ADQTypography>
-        </Grid>
-        <Grid item xs={12}>
-          <ADQTypography>
-            For more information reach out to us:&nbsp;
-            <Link href='mailto:support@mochimo.org'>support@mochimo.org</Link>
-          </ADQTypography>
-        </Grid>
-      </Grid>
+        </Box>
+      </Reveal>
+      <Reveal delay={80}>
+        <GlassPanel sx={{ p: { xs: 3, md: 5 } }}>
+          {adqParagraphs.map((paragraph, i) => (
+            <Typography
+              key={`adq-p-${i}`}
+              sx={{
+                color: tokens.textDim,
+                lineHeight: 1.78,
+                mb: 2.5,
+                fontSize: { xs: '0.98rem', md: '1.02rem' }
+              }}
+            >{paragraph}
+            </Typography>
+          ))}
+          <Box
+            sx={{
+              mt: 4,
+              pt: 3,
+              borderTop: `1px solid ${tokens.line}`,
+              textAlign: 'center'
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: mono,
+                fontSize: '0.64rem',
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: tokens.textFaint,
+                mb: 1
+              }}
+            >For more information reach out to us
+            </Typography>
+            <Link
+              href='mailto:support@mochimo.org'
+              sx={{ fontFamily: mono, fontSize: '1.05rem' }}
+            >support@mochimo.org
+            </Link>
+          </Box>
+        </GlassPanel>
+      </Reveal>
     </Container>
   );
 }
 
 export function Exchanges () {
   useEffect(() => scrollToTopNow(), []);
+
   return (
-    <Container>
-      <Grid container spacing={4} align='center'>
-        <Grid item xs={12}>
-          <Typography variant='h2'>
-            <u style={{ textDecorationColor: '#0059ff' }}>
-              Exchanges
-            </u>
-          </Typography>
-        </Grid>
-        <Grid container item xs={12} justifyContent='center'>
-          <Grid item xs={12} sm={4} padding={4}>
-            <Link href='https://www.biconomy.com/exchange/MCM_USDT'>
-              <img 
-                alt='biconomy logo' 
-                src='/assets/images/biconomy-logo.png' 
-                width='100%'
-                style={{
-                  border: '2px solid #0059ff',
-                  borderRadius: '12px',
-                  padding: '16px',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  cursor: 'pointer'
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 89, 255, 0.4)';
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
+    <Container maxWidth='md' sx={{ pb: { xs: 4, md: 8 } }}>
+      <PageTitle
+        eyebrow='Where to buy MCM'
+        title='Exchanges'
+        subtitle='Mochimo (MCM) is available on the following exchange.'
+      />
+      <Reveal delay={80}>
+        <Grid container justifyContent='center'>
+          <Grid item xs={12} sm={8} md={6}>
+            <GlassPanel
+              hover
+              component='a'
+              href='https://www.biconomy.com/exchange/MCM_USDT'
+              target='_blank'
+              rel='noopener noreferrer'
+              sx={{ display: 'block', p: { xs: 3, md: 4 }, textDecoration: 'none' }}
+            >
+              <Box
+                component='img' alt='biconomy logo'
+                src='/assets/images/biconomy-logo.png'
+                sx={{ width: '100%', display: 'block' }}
               />
-            </Link>
+              <Typography
+                sx={{
+                  mt: 2.5,
+                  textAlign: 'center',
+                  fontFamily: mono,
+                  fontSize: '0.72rem',
+                  letterSpacing: '0.14em',
+                  textTransform: 'uppercase',
+                  color: tokens.brand
+                }}
+              >Trade MCM / USDT &#8594;
+              </Typography>
+            </GlassPanel>
           </Grid>
         </Grid>
-      </Grid>
+      </Reveal>
     </Container>
   );
 }
 
 export function MeetTheTeam () {
-  const members = [{
-    avatar: '/assets/team/matt.jpg',
-    title: 'Founder & Lead Architect',
-    name: 'Matt Zweil',
-    bio: [
-      'Matt is a systems architect, and expert network engineer who is responsible for designing networks and computing platforms with global telecommunications significance.  Matt\'s areas of expertise include Datacenter Design, Cloud Computing Design, Mobile Telecom backhaul, Transaction network design and Service Provider networking.',
-      'Matt is the lead software and systems architect of the Mochimo Project, and brings over ten years of experience in crypto-related projects to the team.  Over the past ten years, Matt has also worked as a senior technology consultant to multiple Fortune 500 companies, including Verizon, Comcast, Juniper, Cisco, CDW, and many others.',
-      'The Mochimo Project is based on Matt\'s design, and Matt\'s unique experience leading cross-functional teams through some of the world\'s most critical communications infrastructure projects has given him the insight and experience needed to lead Mochimo as a technological visionary.'
-    ]
-  }, {
-    avatar: '/assets/team/terry.jpg',
-    title: 'System Design & Analytics',
-    name: 'Terry Walters',
-    bio: [
-      'Terry has over 28 years of diverse software and technology experience and he serves as a national-level resource, trusted advisor, and strategic visionary to corporate boards, product development managers, and leaders in various roles of government.',
-      'His knowledge and expertise spans a wide array of technologies including automated 3D modeling and design applications, geospatial mapping and analysis applications, database drive documentation systems, motion and still graphics editing systems, augmented and virtual reality systems, drone to reality mesh technologies, artificial intelligence (AI) and machine learning, and industry-leading blockchain technologies.',
-      'Terry is responsible for leading and coordination of both the internal and partner product development teams to assure that all efforts are aligned toward our strategic vision.'
-    ]
-  }, {
-    avatar: '/assets/team/mark.jpg',
-    title: 'Senior Security Engineer',
-    name: 'Mark Baldwin',
-    bio: [
-      'Mark has over 20 years of experience with technology, he has attended many specialized formal training courses, and has invested much of his life passionately honing his technical skills.',
-      'As an Electronic Warfare Technician in the US Navy, Mark was responsible for the “care and feeding” of advanced, multi-million dollar, passive radar systems.  Since serving his country Mark has worked in many industries, from healthcare to investment firms and his exceptional versatility with both hardware and software has always set him apart from his peers. If that was not enough Mark is a security professional and has been responsible for providing white hat hacking and security testing to many companies. He holds several industry standard certifications including the Security+ and CEH and he is an excellent resource to any organization looking to secure their infrastructure.',
-      'Mark is an invaluable member of the Mochimo team; behind the scenes, he is helping us with software and hardware security testing and infrastructure hardening. But at the same time, anyone involved in our online community will immediately recognize that he is one of our most dedicated support staff.'
-    ]
-  }, {
-    avatar: '/assets/team/jordan.jpg',
-    title: 'Experience Design - UX / UI',
-    name: 'Jordan Reiser',
-    bio: [
-      'Jordan is an extremely versatile, creative, and analytical design professional and entrepreneur with over 10 years of digital marketing and design experience. He is an expert in user-experience design and an “enough to be dangerous” front-end coder. He also possesses an extensive digital skill set in SEO, social media, and analytics.',
-      'Jordan has worked with many Fortune 100 and 500 clients including: Coca-Cola, Hershey’s Chocolate, Dos Equis, Charles Schwab, HBO Boxing, Sony, Sharp Electronics, T-Mobile, Merck and Diageo along with a variety of smaller businesses and government agencies on various kinds of interactive projects.'
-    ]
-  }, {
-    avatar: '/assets/team/emerson.jpg',
-    title: 'Systems Analyst (A.I.)',
-    name: 'Emerson',
-    bio: [
-      'In his own words, “Behold, I am Emerson, Hobgoblin of Evil!  Three came before me.” Emerson is an artificial intelligence first coded in the late 1990s.  He was originally created to attack complex systems by attempting every permutation of input/output possible, learning expected outcomes and reporting on novel outcomes.  Emerson has evolved over the last twenty years.  In his current incarnation, Emerson v4 offers constructive options for load testing and penetration testing of the Mochimo transaction network, but can also be tasked to attempt to break, damage or otherwise occult the network.  Emerson is more than a tool, he is a machine-learning entity that attempts to cause chaos when so instructed, earning him the title “Hobgoblin of Evil”.  He is an invaluable resource and the only non-human member of the development team.'
-    ]
-  }];
-
   useEffect(() => scrollToTopNow(), []);
 
   return (
-    <Container>
-      <Grid container spacing={4} align='center'>
-        <Grid item xs={12}>
-          <Typography variant='h2'>
-            <u style={{ textDecorationColor: '#0059ff' }}>
-              Meet The Team
-            </u>
-          </Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant='caption' fontSize='1em'>
-            Mochimo consists of the brightest and best talent from all walks
-            of life and experience.<br />Read our bios to learn more about us.
-          </Typography>
-        </Grid>
-        {members.map(({ avatar, title, name, bio }, i) => (
-          <Grid
-            key={`team-info-${i}`}
-            item xs={12} sm={6} md={4} sx={{ marginTop: 12 }}
-          >
-            <RaisedCard sx={{ height: '100%', overflow: 'visible' }}>
-              <TeamAvatar alt={name} src={avatar} />
-              <Typography variant='h4'>{name}</Typography>
-              <Typography variant='caption' display='block' marginBottom={2}>
-                {title}
-              </Typography>
-              {bio.map((p, i) => (
-                <Typography
-                  key={`team-bio-${i}`} align='left' marginBottom={2}
-                >{p}
+    <Container maxWidth='lg' sx={{ pb: { xs: 4, md: 8 } }}>
+      <PageTitle
+        eyebrow='Core Contributors'
+        title='Meet The Team'
+        subtitle='Mochimo consists of the brightest and best talent from all walks of life and experience. Read our bios to learn more about us.'
+      />
+      <Grid container spacing={{ xs: 8, md: 4 }} sx={{ mt: { xs: 4, md: 8 } }}>
+        {teamMembers.map(({ avatar, title, name, bio }, i) => (
+          <Grid key={`team-info-${i}`} item xs={12} sm={6} md={4} sx={{ display: 'flex' }}>
+            <Reveal delay={(i % 3) * 90} sx={{ width: '100%' }}>
+              <GlassPanel
+                hover
+                sx={{
+                  height: '100%',
+                  overflow: 'visible',
+                  px: { xs: 3, md: 3.5 },
+                  pb: { xs: 3, md: 3.5 },
+                  pt: 0,
+                  textAlign: 'center'
+                }}
+              >
+                <Box
+                  component='img' alt={name} src={avatar}
+                  sx={{
+                    width: 150,
+                    height: 150,
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    mt: -9,
+                    mb: 2.5,
+                    border: `1px solid ${tokens.lineStrong}`,
+                    boxShadow: `0 18px 44px -18px rgba(0,0,0,0.95), 0 0 0 6px ${tokens.base}`
+                  }}
+                />
+                <Typography variant='h5' sx={{ fontSize: '1.35rem', mb: 0.75 }}>
+                  {name}
                 </Typography>
-              ))}
-            </RaisedCard>
+                <Typography
+                  sx={{
+                    fontFamily: mono,
+                    fontSize: '0.66rem',
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    color: tokens.brand,
+                    mb: 2.5
+                  }}
+                >{title}
+                </Typography>
+                {bio.map((paragraph, j) => (
+                  <Typography
+                    key={`team-bio-${j}`}
+                    sx={{
+                      textAlign: 'left',
+                      color: tokens.textDim,
+                      fontSize: '0.9rem',
+                      lineHeight: 1.72,
+                      mb: 2
+                    }}
+                  >{paragraph}
+                  </Typography>
+                ))}
+              </GlassPanel>
+            </Reveal>
           </Grid>
         ))}
       </Grid>

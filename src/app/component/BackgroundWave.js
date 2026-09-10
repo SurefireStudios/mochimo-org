@@ -80,13 +80,19 @@ function Points () {
 export default function BackgroundWave () {
   return (
     <Box
+      aria-hidden
       sx={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        transform: 'rotate(180deg)'
+        zIndex: 0,
+        opacity: 0.26,
+        pointerEvents: 'none',
+        transform: 'rotate(180deg)',
+        maskImage: 'linear-gradient(to top, #000 0%, rgba(0,0,0,0.5) 45%, transparent 80%)',
+        WebkitMaskImage: 'linear-gradient(to top, #000 0%, rgba(0,0,0,0.5) 45%, transparent 80%)'
       }}
     >
       <Canvas camera={{ fov: 75, near: NEAR, far: FAR }}>

@@ -8,7 +8,7 @@ import ErrorIcon from '@mui/icons-material/Error';
 import { useGetLedgerEntryQuery, useGetPriceQuery } from 'api';
 import { Amount, Properties } from 'app/component/Types';
 import { BlockHistory, LedgerHistory, TransactionHistory } from 'app/component/Results';
-import { capitalize, isTagged } from 'util';
+import { capitalize, isTagged } from '../util';
 
 const Blank = '---';
 

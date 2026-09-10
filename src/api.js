@@ -1,6 +1,6 @@
 
 import { createApi, fetchBaseQuery, retry } from '@reduxjs/toolkit/query/react';
-import { geodist } from 'util';
+import { geodist } from './util';
 
 export const CoingeckoApi = createApi({
   reducerPath: 'CoingeckoApi',

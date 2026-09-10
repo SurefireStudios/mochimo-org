@@ -1,11 +1,11 @@
 import { forwardRef, lazy, Suspense, useMemo } from 'react';
-import { BrowserRouter, Link, Navigate, Route, Routes } from 'react-router-dom';
-import { Box, CssBaseline, responsiveFontSizes, Typography } from '@mui/material';
+import { BrowserRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Box, CssBaseline } from '@mui/material';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import NewReleasesIcon from '@mui/icons-material/NewReleases';
 
 import ScrollToTop from 'app/component/ScrollToTop';
 import Header from './app/component/Header';
+import baseTheme from 'theme';
 
 import {
   Adq, Exchanges, MeetTheTeam, MobileWalletPrivacy, MobileWalletTerms, Privacy
@@ -24,146 +24,47 @@ import Vote from './app/pages/Vote';
 
 const BackgroundWave = lazy(() => import('app/component/BackgroundWave'));
 
-// custom link handling (forward MUI links to react-router links)
+const FULL_BLEED = ['/', '/network'];
+
 const LinkForwarder = forwardRef(({ children, ...props }, ref) => {
-  // Map 'href' to external link; (MUI) -> to (<a>)
-  // Map 'to' to internal link; (MUI) -> to (react-router)
   return props.href
     ? (<a ref={ref} {...props}>{children}</a>)
     : (<Link ref={ref} {...props}>{children}</Link>);
 });
 
-// News Banner Component
-function NewsBanner() {
+function PageBody ({ children }) {
+  const { pathname } = useLocation();
+  const bleed = FULL_BLEED.includes(pathname) || pathname.startsWith('/mfx');
+
   return (
-    <Link
-      to="/vote"
-      style={{ textDecoration: 'none' }}
-    >
-      <Box
-        sx={{
-          background: 'linear-gradient(90deg, #0059ff 0%, #00d9ff 50%, #0059ff 100%)',
-          backgroundSize: '200% 100%',
-          animation: 'gradientShift 3s ease infinite',
-          '@keyframes gradientShift': {
-            '0%': { backgroundPosition: '0% 50%' },
-            '50%': { backgroundPosition: '100% 50%' },
-            '100%': { backgroundPosition: '0% 50%' }
-          },
-          color: 'white',
-          padding: '12px 16px',
-          textAlign: 'center',
-          position: 'fixed',
-          top: 68,
-          left: 0,
-          right: 0,
-          zIndex: 1099,
-          boxShadow: '0 2px 8px rgba(0, 89, 255, 0.4)',
-          cursor: 'pointer',
-          '&:hover': {
-            filter: 'brightness(1.1)'
-          }
-        }}
-      >
-        <Typography
-          sx={{
-            fontFamily: 'Roboto Mono',
-            fontWeight: 'bold',
-            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1rem' },
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 1
-          }}
-        >
-          <NewReleasesIcon sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />
-          VOTING IS NOW OPEN: Does MCM Become Proof-of-Stake? Click Here for Instructions
-          <NewReleasesIcon sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }} />
-        </Typography>
-      </Box>
-    </Link>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        flexGrow: 1,
+        paddingTop: bleed ? 0 : { xs: '104px', md: '134px' },
+        paddingBottom: bleed ? 0 : { xs: 6, md: 10 }
+      }}
+    >{children}
+    </Box>
   );
 }
 
 export default function App () {
-  const mode = 'dark'; // Theme is hardcoded to dark mode
-  const customTheme = useMemo(() => {
-    return responsiveFontSizes(
-      createTheme({
-        components: {
-          MuiButton: {
-            defaultProps: {
-              color: 'primary'
-            }
-          },
-          MuiContainer: {
-            defaultProps: {
-              sx: { position: 'relative' }
-            }
-          },
-          MuiLink: {
-            defaultProps: {
-              component: LinkForwarder,
-              color: 'primary'
-            }
-          }
-        },
-        palette: {
-          mode,
-          primary: { main: /* mode === 'dark' ? '#00d9ff' : */ '#0059ff' },
-          secondary: { main: '#0059ff' /* '#ffa600' */ },
-          textPrimary: { main: 'white' }
-        },
-        typography: {
-          h1: {
-            fontFamily: 'Iceland',
-            textAlign: 'center',
-            transition: 'font-size 250ms ease'
-          },
-          h2: {
-            fontFamily: 'Nunito Sans',
-            fontWeight: 'bold'
-          },
-          h3: {
-            fontFamily: 'Nunito Sans',
-            fontWeight: 'bold'
-          },
-          h4: {
-            fontFamily: 'Nunito Sans',
-            fontWeight: 'bold'
-          },
-          h5: {
-            fontFamily: 'Nunito Sans',
-            fontWeight: 'bold'
-          },
-          h6: {
-            fontFamily: 'Roboto Mono'
-          },
-          caption: {
-            fontFamily: 'Roboto Mono'
-          },
-          haiku: {
-            fontFamily: 'Redressed',
-            fontSize: '2em',
-            fontWeight: 'bold',
-            letterSpacing: 1.5,
-            whiteSpace: 'pre'
-          }
-        }
-      })
-    );
-  }, [mode]);
-  const mfxTheme = createTheme({
-    ...customTheme, palette: {
-      mode: 'dark', background: { default: 'transparent' }
+  const customTheme = useMemo(() => createTheme(baseTheme, {
+    components: {
+      MuiLink: { defaultProps: { component: LinkForwarder } }
     }
-  });
+  }), []);
+
+  const mfxTheme = useMemo(() => createTheme(customTheme, {
+    palette: { background: { default: 'transparent' } }
+  }), [customTheme]);
 
   return (
     <ThemeProvider theme={customTheme}>
       <BrowserRouter>
-        {/* Header (always shown) */}
-        {/* Header removed on /network/globe */}
         <Routes>
           <Route path='mfx'>
             <Route
@@ -179,33 +80,20 @@ export default function App () {
             path='*' element={(
               <>
                 <CssBaseline />
-                <Header actualTheme={mode} />
-                <NewsBanner />
+                <Header />
               </>
             )}
           />
         </Routes>
-        {/* Page layout container (minimum 100% "visual height") */}
         <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
             minHeight: '100vh'
           }}
-        >{/* Page body (auto fills remaining layout height) */}
-          <Box
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              position: 'relative',
-              paddingBottom: 10,
-              paddingTop: 15,
-              flexGrow: 1
-            }}
-          >
+        >
+          <PageBody>
             <Routes>
-              {/* Background effects Routes */}
               <Route index element={null} />
               <Route path='mfx'>
                 <Route path='*' element={null} />
@@ -219,8 +107,8 @@ export default function App () {
                 )}
               />
             </Routes>
+            <Box sx={{ position: 'relative', zIndex: 1 }}>
             <Routes>
-              {/* Page content Routes */}
               <Route index element={<Homepage />} />
               <Route path='adq' element={<Adq />} />
               <Route path='mfx'>
@@ -256,19 +144,17 @@ export default function App () {
               <Route path='faq' element={<FAQ />} />
               <Route path='vote' element={<Vote />} />
             </Routes>
-          </Box>
+            </Box>
+          </PageBody>
           <Routes>
-            {/* Page footer (not shown on interactive network page) */}
             <Route path='network' element={null} />
             <Route path='mfx'>
               <Route path='*' element={null} />
             </Route>
             <Route path='*' element={<Footer />} />
           </Routes>
-          
         </Box>
       </BrowserRouter>
-      {/* ScrollToTop component sits above all other components */}
       <ScrollToTop />
     </ThemeProvider>
   );

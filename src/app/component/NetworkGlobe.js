@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { applyObjDiff, dupObj } from 'util';
+import { applyObjDiff, dupObj } from '../../util';
 import { useGetNetworkQuery } from 'api';
 
 import { Box, LinearProgress } from '@mui/material';
@@ -160,7 +160,7 @@ export default function NetworkGlobe ({ mfx }) {
       window.addEventListener('resize', resize);
       return () => window.removeEventListener('resize', resize);
     }
-  }, [mql.matches]);
+  }, [mql.matches, mfx]);
 
   useEffect(() => {
     if (globe.current) {
